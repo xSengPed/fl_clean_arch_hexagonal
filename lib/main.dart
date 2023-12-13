@@ -1,8 +1,12 @@
 import 'package:fl_clean_arch_hexagonal/core/presentation/home.dart';
+import 'package:fl_clean_arch_hexagonal/core/services/api_services.dart';
 import 'package:fl_clean_arch_hexagonal/dependency_injector.dart' as di;
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future<void> main() async {
+  await dotenv.load(fileName: ".env");
+  ApiServices.init();
   di.init();
   runApp(const MyApp());
 }
@@ -12,9 +16,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: Home(),
-      ////
     );
   }
 }

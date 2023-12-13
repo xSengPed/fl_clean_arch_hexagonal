@@ -1,13 +1,15 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiServices {
-  static Dio _dioClient = Dio();
+  static Dio client = Dio();
 
   ApiServices.init() {
-    const String baseUrl = "";
     const int apiTimeoutDuration = 10 * 1000;
+
+    String baseUrl = dotenv.env["API_BASE_URL"] ?? "";
 
     Map<String, dynamic> headers = {};
 
@@ -17,7 +19,7 @@ class ApiServices {
       connectTimeout: const Duration(milliseconds: apiTimeoutDuration),
     );
 
-    _dioClient = Dio(options);
+    client = Dio(options);
 
     Interceptor interceptor = InterceptorsWrapper(
       onRequest: (options, handler) {
@@ -31,26 +33,28 @@ class ApiServices {
       },
     );
 
-    _dioClient.interceptors.add(interceptor);
+    client.interceptors.add(interceptor);
   }
 
+  // Global Api
+
   static Future<void> createPost() async {
-    final serviceRes = _dioClient.post("/create");
+    final serviceRes = client.post("/create");
     log(serviceRes.toString());
   }
 
   static Future<void> getPost() async {
-    final serviceRes = _dioClient.get("/get");
+    final serviceRes = client.get("/get");
     log(serviceRes.toString());
   }
 
   static Future<void> updatePost() async {
-    final serviceRes = _dioClient.put("/update");
+    final serviceRes = client.put("/update");
     log(serviceRes.toString());
   }
 
   static Future<void> deletePost() async {
-    final serviceRes = _dioClient.delete("/delete");
+    final serviceRes = client.delete("/delete");
     log(serviceRes.toString());
   }
 }
